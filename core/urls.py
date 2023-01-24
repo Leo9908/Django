@@ -20,5 +20,10 @@ from .views import HomeView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', HomeView.as_view(), name='home'),
-    path('blog/', include('blog.urls', namespace='blog'))
+    path('blog/', include('blog.urls', namespace='blog')),
+    path('users/', include('users.urls', namespace='users'))
 ]
+
+# Para definir que pagina va a mostrar cuando ocurra un error 404
+handler404 = 'blog.views.status_code_view'
+# handler500 = 'blog.views.status_code_view'
