@@ -6,8 +6,7 @@ from django.views.generic import (
     ListView,
     CreateView,
     DetailView)
-from .forms import PostCreateForm
-from .models import Post
+from .models import Post, Blog
 from django.urls import reverse_lazy
 from django.http import HttpResponseNotFound
 
@@ -16,39 +15,58 @@ from django.http import HttpResponseNotFound
 # Así es fácil crear las vistas porque ya Django viene con estas vistas genéricas
 # pero mas abajo hay algunos ejemplos sin usar estas vistas genericas para las operaciones CRUD
 
-# Esta es una vista de clase
+# Estas son vistas de clase
 
 
 class BlogListView(ListView):
-    model = Post
-    template_name = 'blog_list.html'
+    model = Blog
+    template_name = 'blog/blog_list.html'
 
 
 class BlogCreateView(CreateView):
+    model = Blog
+    fields = ['name', 'tagline', 'image']
+    template_name = 'blog/blog_create.html'
+    success_url = reverse_lazy('blog:blog_list')
+
+
+class BlogDeleteView(DeleteView):
+    model = Blog
+    # Estoy reutilizando el template de confirmación de los Post
+    template_name = 'post_delete.html'
+    success_url = reverse_lazy('blog:blog_list')
+
+
+class PostListView(ListView):
+    model = Post
+    template_name = 'post_list.html'
+
+
+class PostCreateView(CreateView):
     model = Post
     fields = ['title', 'content']
-    template_name = 'blog_create.html'
+    template_name = 'post_create.html'
     success_url = reverse_lazy('blog:home')
 
 
-class BlogDetailView(DetailView):
+class PostDetailView(DetailView):
     model = Post
-    template_name = 'blog_detail.html'
+    template_name = 'post_detail.html'
 
 
-class BlogUpdateView(UpdateView):
+class PostUpdateView(UpdateView):
     model = Post
     fields = ['title', 'content']
-    template_name = 'blog_update.html'
+    template_name = 'post_update.html'
 
     def get_success_url(self):
         pk = self.kwargs['pk']
         return reverse_lazy('blog:detail', kwargs={'pk': pk})
 
 
-class BlogDeleteView(DeleteView):
+class PostDeleteView(DeleteView):
     model = Post
-    template_name = 'blog_delete.html'
+    template_name = 'post_delete.html'
     success_url = reverse_lazy('blog:home')
 
 
@@ -61,23 +79,23 @@ def status_code_view(request, exception):
 # Habría que retornar el contexto para poder usarlo en el html
 # pero con las vistas genéricas ya eso se hace por detrás
 """
-class BlogListView(View):
+class PostListView(View):
     def get(self, request, *args, **kwargs):
         posts = Post.objects.all()
         # Para poder usar los objetos en html
         context = {
             'posts': posts
         }
-        return render(request, 'blog_list.html', context)
+        return render(request, 'post_list.html', context)
 
 
-class BlogCreateView(View):
+class PostCreateView(View):
     def get(self, request, *args, **kwargs):
         form = PostCreateForm()
         context = {
             'form': form
         }
-        return render(request, 'blog_create.html', context)
+        return render(request, 'post_create.html', context)
 
     def post(self, request, *args, **kwargs):
         if request.method == 'POST':
@@ -95,15 +113,15 @@ class BlogCreateView(View):
         context = {
 
         }
-        return render(request, 'blog_create.html', context)
+        return render(request, 'post_create.html', context)
 
 
-class BlogDetailView(View):
+class PostDetailView(View):
     def get(self, request, pk, *args, **kwargs):
         post = get_object_or_404(Post, pk=pk)
         context = {
             'post': post
         }
-        return render(request, 'blog_detail.html', context)
+        return render(request, 'post_detail.html', context)
 
 """

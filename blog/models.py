@@ -16,6 +16,7 @@ class Post(models.Model):
 class Blog(models.Model):
     name = models.CharField(max_length=100)
     tagline = models.TextField()
+    image = models.ImageField(blank=True, null=True)
 
     def __str__(self):
         return self.name

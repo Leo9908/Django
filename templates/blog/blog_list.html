@@ -1,0 +1,13 @@
+{% extends 'base.html' %} {% block content %} Blog list
+<ul>
+  {% for blog in blog_list%}
+  <li>
+    {{blog.name}}
+    <a href="{% url 'blog:delete_blog' blog.id %}">Delete</a>
+    <img src="{{blog.image.url}}" />
+  </li>
+  {% endfor %}
+</ul>
+<a href="{% url 'blog:create_blog' %}">Create blog</a>
+
+{% endblock content %}

@@ -4,8 +4,6 @@
    un token csrf
   {% endcomment %}
   {% csrf_token %}
-  title {{form.title}}
-  <br>
-  content {{form.content}}
+  {{form.as_p}}
   <button type="submit"/>Submit
 </form>

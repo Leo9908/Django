@@ -1,14 +1,14 @@
-{% extends 'base.html' %} {% block content %}
- blog list 
- {% for post in post_list%}
+{% extends 'base.html' %} {% block content %} Posts list -
+<a href="{% url 'blog:blog_list' %}">Create my blog</a>
 <ul>
+  {% for post in post_list%}
   <li>
     <a href="{% url 'blog:detail' post.id %}">{{post.title}}</a>
     <a href="{% url 'blog:update' post.id %}">Update</a>
     <a href="{% url 'blog:delete' post.id %}">Delete</a>
   </li>
+  {% endfor %}
 </ul>
-{% endfor %}
 <br />
-<a href="{% url 'blog:create' %}">Create</a>
+<a href="{% url 'blog:create' %}">Create post</a>
 {% endblock content %}
